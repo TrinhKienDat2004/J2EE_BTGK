@@ -1,0 +1,76 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Sign up to Bookstore</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+  </head>
+  <body>
+    <div class="container mt-4" style="max-width: 500px">
+      <h2 class="mb-4">Sign up to Bookstore</h2>
+      <form th:action="@{/signup}" method="post" th:object="${user}" novalidate>
+        <div class="form-group">
+          <label>Email</label>
+          <input
+            type="email"
+            th:field="*{email}"
+            class="form-control"
+            required
+          />
+          <div class="text-danger" th:if="${#fields.hasErrors('email')}">
+            <span th:errors="*{email}"></span>
+          </div>
+          <div class="text-danger" th:if="${emailError}">
+            <span th:text="${emailError}"></span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Username</label>
+          <input
+            type="text"
+            th:field="*{username}"
+            class="form-control"
+            required
+          />
+          <div class="text-danger" th:if="${#fields.hasErrors('username')}">
+            <span th:errors="*{username}"></span>
+          </div>
+          <div class="text-danger" th:if="${usernameError}">
+            <span th:text="${usernameError}"></span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Phone</label>
+          <input
+            type="text"
+            th:field="*{phone}"
+            class="form-control"
+            required
+          />
+          <div class="text-danger" th:if="${#fields.hasErrors('phone')}">
+            <span th:errors="*{phone}"></span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input
+            type="password"
+            th:field="*{password}"
+            class="form-control"
+            required
+          />
+          <div class="text-danger" th:if="${#fields.hasErrors('password')}">
+            <span th:errors="*{password}"></span>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Sign up</button>
+        <div class="mt-2">
+          Already have an account? <a href="/login">Login in!</a>
+        </div>
+      </form>
+    </div>
+  </body>
+</html>

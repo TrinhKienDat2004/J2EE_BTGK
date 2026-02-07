@@ -1,0 +1,77 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Cart</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <a class="navbar-brand" href="#">HUTECH</a>
+      <div class="collapse navbar-collapse">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+          <li class="nav-item">
+            <a class="nav-link" href="/books">List Book</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/books/add">Add Book</a>
+          </li>
+          <li class="nav-item"><a class="nav-link" href="/cart">Cart</a></li>
+        </ul>
+      </div>
+    </nav>
+    <div class="container mt-4">
+      <h2>Your cart</h2>
+      <div th:if="${#lists.isEmpty(cartItems)}">
+        <div class="alert alert-info text-center">
+          <h4>Your cart is empty</h4>
+          <p>Please add some books to your cart</p>
+          <a href="/books" class="btn btn-primary">Go to list book</a>
+        </div>
+      </div>
+      <div th:if="${!#lists.isEmpty(cartItems)}">
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>Book ID</th>
+              <th>Book Name</th>
+              <th>Quantity</th>
+              <th>Price</th>
+              <th>Total</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr th:each="item : ${cartItems}">
+              <td th:text="${item.book.id}"></td>
+              <td th:text="${item.book.title}"></td>
+              <td th:text="${item.quantity}"></td>
+              <td th:text="${item.book.price}"></td>
+              <td th:text="${item.book.price * item.quantity}"></td>
+              <td>
+                <a
+                  th:href="@{'/cart/remove/' + ${item.book.id}}"
+                  class="btn btn-danger btn-sm"
+                  >Remove</a
+                >
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="d-flex justify-content-between align-items-center">
+          <h5>Total: <span th:text="${total}"></span></h5>
+          <div>
+            <a href="/cart/clear" class="btn btn-danger">Clear Cart</a>
+            <form th:action="@{/cart/checkout}" method="post" style="display:inline">
+              <button type="submit" class="btn btn-success">Checkout</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
