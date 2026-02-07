@@ -1,8 +1,8 @@
 <!doctype html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
   <body>
     <h2>Danh sách sách</h2>
-    <a href="/books/add">➕ Thêm sách</a>
+    <a href="/books/add" sec:authorize="hasRole('ADMIN')">➕ Thêm sách</a>
     <table border="1">
       <tr>
         <th>ID</th>
@@ -17,8 +17,10 @@
         <td th:text="${b.author}"></td>
         <td th:text="${b.price}"></td>
         <td>
-          <a th:href="@{/books/edit/{id}(id=${b.id})}">Sửa</a>
-          <a th:href="@{/books/delete/{id}(id=${b.id})}">Xóa</a>
+          <span sec:authorize="hasRole('ADMIN')">
+            <a th:href="@{/books/edit/{id}(id=${b.id})}">Sửa</a>
+            <a th:href="@{/books/delete/{id}(id=${b.id})}">Xóa</a>
+          </span>
         </td>
       </tr>
     </table>

@@ -1,5 +1,5 @@
 <!doctype html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
   <head>
     <meta charset="UTF-8" />
     <title>Cart</title>
@@ -17,7 +17,7 @@
           <li class="nav-item">
             <a class="nav-link" href="/books">List Book</a>
           </li>
-          <li class="nav-item">
+          <li class="nav-item" sec:authorize="hasRole('ADMIN')">
             <a class="nav-link" href="/books/add">Add Book</a>
           </li>
           <li class="nav-item"><a class="nav-link" href="/cart">Cart</a></li>

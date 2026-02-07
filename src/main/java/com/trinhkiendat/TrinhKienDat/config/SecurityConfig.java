@@ -15,10 +15,14 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.trinhkiendat.TrinhKienDat.repository.UserRepository;
 import com.trinhkiendat.TrinhKienDat.model.User;
+import com.trinhkiendat.TrinhKienDat.model.Role;
+import com.trinhkiendat.TrinhKienDat.repository.RoleRepository;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 @Configuration
+@EnableMethodSecurity
 public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http, OAuth2UserService<OAuth2UserRequest, OAuth2User> oauth2UserService) throws Exception {
@@ -52,7 +56,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public OAuth2UserService<OAuth2UserRequest, OAuth2User> oauth2UserService(com.trinhkiendat.TrinhKienDat.repository.UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public OAuth2UserService<OAuth2UserRequest, OAuth2User> oauth2UserService(com.trinhkiendat.TrinhKienDat.repository.UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
         DefaultOAuth2UserService delegate = new DefaultOAuth2UserService();
         return (OAuth2UserRequest userRequest) -> {
             OAuth2User oauth2User = delegate.loadUser(userRequest);
@@ -69,6 +73,11 @@ public class SecurityConfig {
                     String name = oauth2User.getAttribute("name");
                     if (name != null) {
                         user.setFullName(name);
+                    }
+                    // assign default USER role if exists
+                    Role userRole = roleRepository.findByName("USER");
+                    if (userRole != null) {
+                        user.getRoles().add(userRole);
                     }
                     userRepository.save(user);
                 } else {
@@ -91,10 +100,11 @@ public class SecurityConfig {
             if (user == null) {
                 throw new UsernameNotFoundException("User not found");
             }
+            String[] roles = user.getRoles().stream().map(Role::getName).toArray(String[]::new);
             return org.springframework.security.core.userdetails.User
                 .withUsername(user.getUsername())
                 .password(user.getPassword())
-                .roles("USER")
+                .roles(roles)
                 .build();
         };
     }

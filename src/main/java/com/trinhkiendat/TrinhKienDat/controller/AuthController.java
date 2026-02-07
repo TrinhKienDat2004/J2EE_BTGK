@@ -2,6 +2,8 @@ package com.trinhkiendat.TrinhKienDat.controller;
 
 import com.trinhkiendat.TrinhKienDat.model.User;
 import com.trinhkiendat.TrinhKienDat.repository.UserRepository;
+import com.trinhkiendat.TrinhKienDat.repository.RoleRepository;
+import com.trinhkiendat.TrinhKienDat.model.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -17,6 +19,9 @@ public class AuthController {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private RoleRepository roleRepository;
 
     @GetMapping("/login")
     public String login() {
@@ -43,6 +48,10 @@ public class AuthController {
             return "signup";
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        Role userRole = roleRepository.findByName("USER");
+        if (userRole != null) {
+            user.getRoles().add(userRole);
+        }
         userRepository.save(user);
         return "redirect:/login?signupSuccess";
     }

@@ -6,6 +6,7 @@ import com.trinhkiendat.TrinhKienDat.model.Category;
 import com.trinhkiendat.TrinhKienDat.repository.BookRepository;
 import com.trinhkiendat.TrinhKienDat.repository.CategoryRepository;
 import org.springframework.stereotype.Controller;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.data.domain.Page;
@@ -58,6 +59,7 @@ public class BookController {
 
     // Hiển thị form thêm sách
     @GetMapping("/add")
+    @PreAuthorize("hasRole('ADMIN')")
     public String showAddForm(Model model) {
         model.addAttribute("book", new Book());
         model.addAttribute("categories", categoryRepository.findAll());
@@ -66,6 +68,7 @@ public class BookController {
 
     // Thêm sách
     @PostMapping("/add")
+    @PreAuthorize("hasRole('ADMIN')")
     public String addBook(@Valid @ModelAttribute Book book, BindingResult result, Model model) {
         if (result.hasErrors()) {
             model.addAttribute("categories", categoryRepository.findAll());
@@ -81,6 +84,7 @@ public class BookController {
 
     // Sửa sách - hiển thị form
     @GetMapping("/edit/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public String showEditForm(@PathVariable Long id, Model model) {
         Book book = bookRepository.findById(id).orElse(null);
         if (book == null) {
@@ -97,6 +101,7 @@ public class BookController {
 
     // Sửa sách - xử lý cập nhật
     @PostMapping("/edit")
+    @PreAuthorize("hasRole('ADMIN')")
     public String editBook(@Valid @ModelAttribute("book") Book book, BindingResult result, Model model) {
         if (result.hasErrors()) {
             model.addAttribute("categories", categoryRepository.findAll());
@@ -138,6 +143,7 @@ public class BookController {
 
     // Xóa sách
     @GetMapping("/delete/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public String deleteBook(@PathVariable Long id) {
         bookRepository.deleteById(id);
         return "redirect:/books";
