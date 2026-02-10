@@ -1,28 +1,96 @@
 <!doctype html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Danh sách sách</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        background: linear-gradient(120deg, #f8fafc 0%, #e0e7ff 100%);
+        min-height: 100vh;
+      }
+      .card {
+        border-radius: 1.5rem;
+        box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+      }
+      .btn-success {
+        background: linear-gradient(90deg, #6366f1 0%, #22d3ee 100%);
+        border: none;
+      }
+      .btn-success:hover {
+        background: linear-gradient(90deg, #22d3ee 0%, #6366f1 100%);
+      }
+      .btn-primary {
+        background: linear-gradient(90deg, #6366f1 0%, #22d3ee 100%);
+        border: none;
+      }
+      .btn-primary:hover {
+        background: linear-gradient(90deg, #22d3ee 0%, #6366f1 100%);
+      }
+    </style>
+  </head>
   <body>
-    <h2>Danh sách sách</h2>
-    <a href="/books/add" sec:authorize="hasRole('ADMIN')">➕ Thêm sách</a>
-    <table border="1">
-      <tr>
-        <th>ID</th>
-        <th>Tên</th>
-        <th>Tác giả</th>
-        <th>Giá</th>
-        <th>Hành động</th>
-      </tr>
-      <tr th:each="b : ${books}">
-        <td th:text="${b.id}"></td>
-        <td th:text="${b.title}"></td>
-        <td th:text="${b.author}"></td>
-        <td th:text="${b.price}"></td>
-        <td>
-          <span sec:authorize="hasRole('ADMIN')">
-            <a th:href="@{/books/edit/{id}(id=${b.id})}">Sửa</a>
-            <a th:href="@{/books/delete/{id}(id=${b.id})}">Xóa</a>
-          </span>
-        </td>
-      </tr>
-    </table>
+    <div class="container py-5">
+      <div class="row justify-content-center">
+        <div class="col-md-10 col-lg-9">
+          <div class="card p-4">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <h2 class="fw-bold mb-0" style="color: #6366f1">
+                Danh sách sách
+              </h2>
+              <a
+                href="/books/add"
+                class="btn btn-success"
+                sec:authorize="hasRole('ADMIN')"
+                >➕ Thêm sách</a
+              >
+            </div>
+            <div class="table-responsive">
+              <table class="table table-hover align-middle">
+                <thead class="table-light">
+                  <tr>
+                    <th>ID</th>
+                    <th>Tên</th>
+                    <th>Tác giả</th>
+                    <th>Giá</th>
+                    <th>Hành động</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr th:each="b : ${books}">
+                    <td th:text="${b.id}"></td>
+                    <td th:text="${b.title}"></td>
+                    <td th:text="${b.author}"></td>
+                    <td th:text="${b.price}"></td>
+                    <td>
+                      <span sec:authorize="hasRole('ADMIN')">
+                        <a
+                          th:href="@{/books/edit/{id}(id=${b.id})}"
+                          class="btn btn-sm btn-primary me-1"
+                          >Sửa</a
+                        >
+                        <a
+                          th:href="@{/books/delete/{id}(id=${b.id})}"
+                          class="btn btn-sm btn-danger"
+                          >Xóa</a
+                        >
+                      </span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
   </body>
 </html>

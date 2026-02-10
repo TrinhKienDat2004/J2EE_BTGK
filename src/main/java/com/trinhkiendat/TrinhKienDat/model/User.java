@@ -12,22 +12,30 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+
     @NotBlank(message = "Username is required")
+    @Size(min = 1, max = 50, message = "Username must be between 1 and 50 characters")
     @Column(length = 50, unique = true)
     private String username;
 
     @NotBlank(message = "Email is required")
-    @Email(message = "Email is invalid")
+    @Email(message = "Email must be valid")
+    @Size(min = 1, max = 50, message = "Email must be between 1 and 50 characters")
     @Column(length = 50, unique = true)
     private String email;
 
+
     @NotBlank(message = "Phone is required")
+    @Pattern(regexp = "^\\d{10}$", message = "Phone must be 10 digits")
+    @Size(min = 1, max = 50, message = "Phone must be between 1 and 50 characters")
     @Column(length = 10)
     private String phone;
 
     private String fullName;
 
+
     @NotBlank(message = "Password is required")
+    @Size(min = 1, max = 50, message = "Password must be between 1 and 50 characters")
     @Column(length = 250)
     private String password;
 
